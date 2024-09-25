@@ -17,10 +17,16 @@ class Knight
       path.unshift(position)
       position = previous_positions[position]
     end
+    print_moves(path)
     path
   end
 
   private
+
+  def print_moves(path)
+    puts "You made it in #{path.length - 1} moves! Here's your path:"
+    path.each { |position| p position }
+  end
 
   def get_paths(start, goal)
     previous_positions = {}
