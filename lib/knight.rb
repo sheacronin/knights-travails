@@ -9,14 +9,32 @@ class Knight
     @adjacencies = build_adjacencies(board)
   end
 
+  def moves(start, goal)
+    previous_positions = get_paths(start, goal)
+    position = goal
+    path = []
+    until path.first == start
+      path.unshift(position)
+      position = previous_positions[position]
+    end
+    path
+  end
+
   private
 
-  def build_adjacencies(board)
-    adjacencies = {}
-    board.squares.each do |square|
-      adjacencies[square] = moves_from(square)
+  def get_paths(start, goal)
+    previous_positions = {}
+    queue = [start]
+    visited = []
+    until previous_positions.include?(goal)
+      position = queue.shift
+      adjacencies[position].reject { |square| visited.include?(square) }.each do |square|
+        visited << square
+        previous_positions[square] = position
+        queue << square
+      end
     end
-    adjacencies
+    previous_positions
   end
 
   def moves_from(square)
@@ -33,5 +51,13 @@ class Knight
     ].select do |move|
       move.all? { |i| i >= 0 && i < @board.size }
     end
+  end
+
+  def build_adjacencies(board)
+    adjacencies = {}
+    board.squares.each do |square|
+      adjacencies[square] = moves_from(square)
+    end
+    adjacencies
   end
 end
