@@ -13,15 +13,8 @@ class Board
 
   def build_board(size)
     Array.new(size * size) do |i|
-      row = i % (size - 1)
-      if i < size
-        row = i
-      elsif (i % (size - 1)).zero?
-        row = size - 1
-      end
-
+      row = i >= size ? i % size : i
       col = (i / size).floor
-
       [row, col]
     end
   end
